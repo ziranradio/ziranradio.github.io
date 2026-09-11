@@ -18,7 +18,8 @@ function select(index) {
  $('audio').pause(); $('audio').removeAttribute('src'); $('audio').load(); $('audio').hidden = true;
  $('video').replaceChildren(); $('video').hidden = true;
  $('now-title').textContent = track.title; $('now-artist').textContent = `${track.artist} · ${track.version}`;
- $('source').href = `https://www.youtube.com/watch?v=${track.video}`;
+ $('source').href = track.audio || `https://www.youtube.com/watch?v=${track.video}`;
+ $('source').textContent = track.audio ? '打开音频' : '官方收听页面';
  $('status').textContent = track.audio ? '音频已就绪，点击播放。' : '选择的是官方在线版本，点击打开播放器。';
  $('play').textContent = track.audio ? '播放' : '打开播放器';
  buttons.forEach((button,i) => button.setAttribute('aria-pressed', String(i === selected)));
