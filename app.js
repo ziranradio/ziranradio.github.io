@@ -17,11 +17,12 @@ function select(index) {
  const track = tracks[selected];
  $('audio').pause(); $('audio').removeAttribute('src'); $('audio').load(); $('audio').hidden = true;
  $('video').replaceChildren(); $('video').hidden = true;
- $('now-title').textContent = track.title; $('now-artist').textContent = `${track.artist} · ${track.version}`;
- $('source').href = track.audio || `https://www.youtube.com/watch?v=${track.video}`;
- $('source').textContent = track.audio ? '打开音频' : '官方收听页面';
- $('status').textContent = track.audio ? '音频已就绪，点击播放。' : '选择的是官方在线版本，点击打开播放器。';
- $('play').textContent = track.audio ? '播放' : '打开播放器';
+ $('now-title').textContent = track.title; $('now-artist').textContent = track.artist;
+ $('source').href = track.audio || track.source;
+ $('source').textContent = track.audio ? '打开音频' : '在 QQ 音乐查找 ↗';
+ $('status').textContent = track.audio ? '音频已就绪，点击播放。' : '这首歌的完整音频待接入。';
+ $('play').textContent = track.audio ? '播放' : '音频待接入';
+ $('play').disabled = !track.audio;
  buttons.forEach((button,i) => button.setAttribute('aria-pressed', String(i === selected)));
 }
 async function play() {
@@ -35,13 +36,7 @@ async function play() {
   try { await audio.play(); } catch { $('status').textContent = '暂时无法播放，请检查音源或稍后重试。'; }
   return;
  }
- const frame = document.createElement('iframe');
- frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(track.video)}?playsinline=1`;
- frame.title = `${track.title} · 官方播放器`; frame.allow = 'encrypted-media; fullscreen; picture-in-picture'; frame.allowFullscreen = true;
- frame.referrerPolicy = 'strict-origin-when-cross-origin';
- $('video').replaceChildren(frame); $('video').hidden = false;
- $('status').textContent = '请在播放器中点播放；若无法加载，可打开官方页面。';
- $('play').textContent = '重新打开播放器';
+ $('status').textContent = '这首歌的完整音频待接入，可在 QQ 音乐查找。';
 }
 $('play').addEventListener('click', play);
 $('previous').addEventListener('click', () => select(selected-1));
