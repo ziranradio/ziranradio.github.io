@@ -17,7 +17,7 @@ function select(index) {
  const track = tracks[selected];
  $('audio').pause(); $('audio').removeAttribute('src'); $('audio').load(); $('audio').hidden = true;
  $('video').replaceChildren(); $('video').hidden = true;
- $('now-title').textContent = track.title; $('now-artist').textContent = track.artist;
+ $('now-title').textContent = track.title; $('now-artist').textContent = track.artist; $('tape-date').textContent = track.date;
  $('source').href = track.audio || track.source;
  $('source').textContent = track.audio ? '打开音频' : '在 QQ 音乐查找 ↗';
  $('status').textContent = track.audio ? '音频已就绪，点击播放。' : '这首歌的完整音频待接入。';
@@ -41,8 +41,8 @@ async function play() {
 $('play').addEventListener('click', play);
 $('previous').addEventListener('click', () => select(selected-1));
 $('next').addEventListener('click', () => select(selected+1));
-$('audio').addEventListener('play', () => { $('play').textContent='暂停'; $('status').textContent='正在播放'; });
-$('audio').addEventListener('pause', () => { if(tracks[selected].audio) $('play').textContent='播放'; });
+$('audio').addEventListener('play', () => { document.querySelector('.tape').classList.add('is-playing'); $('play').textContent='暂停'; $('status').textContent='正在播放'; });
+$('audio').addEventListener('pause', () => { document.querySelector('.tape').classList.remove('is-playing'); if(tracks[selected].audio) $('play').textContent='播放'; });
 $('audio').addEventListener('error', () => { $('status').textContent='音频暂时不可用，请稍后重试。'; });
 $('audio').addEventListener('ended', () => { select(selected+1); if(tracks[selected].audio) play(); });
 select(0);
